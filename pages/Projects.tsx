@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useProjects } from '../hooks/useMockData';
 import ProjectCard from '../components/projects/ProjectCard';
-import { Project, ProjectStatus } from '../types';
+import { Project, ProjectStatus, ProjectTemplate } from '../types';
 import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
 import ProjectForm, { ProjectFormData } from '../components/projects/ProjectForm';
 import { ArrowDownIcon, ArrowUpIcon } from '../components/ui/Icon';
+import ProjectTemplateSelector from '../components/projects/ProjectTemplateSelector';
 
 const Projects: React.FC = () => {
   const { data: initialProjects, loading } = useProjects();
   const [projects, setProjects] = useState<Project[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFormModalOpen, setFormModalOpen] = useState(false);
+  const [isTemplateModalOpen, setTemplateModalOpen] = useState(false);
+  const [initialFormData, setInitialFormData] = useState<Partial<ProjectFormData> | undefined>();
   const [statusFilter, setStatusFilter] = useState<string>('All');
   const [sortBy, setSortBy] = useState<'name' | 'startDate' | 'endDate'>('startDate');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
@@ -27,7 +30,18 @@ const Projects: React.FC = () => {
       id: `proj-${Date.now()}`, // Simple unique ID for mock purposes
     };
     setProjects(prevProjects => [newProject, ...prevProjects]);
-    setIsModalOpen(false);
+    setFormModalOpen(false);
+  };
+
+  const handleOpenNewProject = () => {
+    setInitialFormData(undefined);
+    setFormModalOpen(true);
+  };
+
+  const handleTemplateSelect = (template: ProjectTemplate) => {
+    setInitialFormData(template.defaultData);
+    setTemplateModalOpen(false);
+    setFormModalOpen(true);
   };
   
   const displayedProjects = useMemo(() => {
@@ -56,17 +70,22 @@ const Projects: React.FC = () => {
 
   return (
     <>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Create New Project">
+      <Modal isOpen={isFormModalOpen} onClose={() => setFormModalOpen(false)} title="Create New Project">
         <ProjectForm 
           onSubmit={handleCreateProject}
-          onCancel={() => setIsModalOpen(false)}
+          onCancel={() => setFormModalOpen(false)}
+          initialData={initialFormData}
         />
+      </Modal>
+      
+      <Modal isOpen={isTemplateModalOpen} onClose={() => setTemplateModalOpen(false)} title="Select a Project Template">
+          <ProjectTemplateSelector onTemplateSelect={handleTemplateSelect} />
       </Modal>
 
       <div className="space-y-6">
         <div className="flex justify-between items-center flex-wrap gap-y-4">
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Projects</h1>
-          <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
             <select 
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -89,7 +108,10 @@ const Projects: React.FC = () => {
             <Button variant="secondary" onClick={toggleSortOrder} className="p-2" aria-label={`Sort ${sortOrder === 'asc' ? 'descending' : 'ascending'}`}>
                 {sortOrder === 'asc' ? <ArrowUpIcon className="w-4 h-4" /> : <ArrowDownIcon className="w-4 h-4" />}
             </Button>
-            <Button onClick={() => setIsModalOpen(true)}>
+            <Button variant="secondary" onClick={() => setTemplateModalOpen(true)}>
+                Use a Template
+            </Button>
+            <Button onClick={handleOpenNewProject}>
               New Project
             </Button>
           </div>

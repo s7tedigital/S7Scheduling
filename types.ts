@@ -1,3 +1,4 @@
+import { ProjectFormData } from "./components/projects/ProjectForm";
 
 export enum ProjectStatus {
   Planning = 'Planning',
@@ -47,4 +48,11 @@ export interface CastMember {
     availability: string[];
 }
 
-export type SelectableItem = Project | Scene | CastMember | null;
+export interface ProjectTemplate {
+  id: string;
+  name: string;
+  description: string;
+  defaultData: Partial<ProjectFormData>;
+}
+
+export type SelectableItem = Project | Scene | CastMember | ProjectTemplate | null;

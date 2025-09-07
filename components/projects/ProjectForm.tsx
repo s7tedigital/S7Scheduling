@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Project, ProjectStatus } from '../../types';
 import Button from '../ui/Button';
@@ -9,19 +9,34 @@ export type ProjectFormData = Omit<Project, 'id'>;
 interface ProjectFormProps {
   onSubmit: SubmitHandler<ProjectFormData>;
   onCancel: () => void;
+  initialData?: Partial<ProjectFormData>;
 }
 
-const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, onCancel }) => {
-  const { register, handleSubmit, formState: { errors }, watch } = useForm<ProjectFormData>({
+const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, onCancel, initialData }) => {
+  const { register, handleSubmit, formState: { errors }, watch, reset } = useForm<ProjectFormData>({
     defaultValues: {
       status: ProjectStatus.Planning,
       budget: 0,
       description: '',
       director: '',
       producer: '',
-      name: ''
+      name: '',
+      ...initialData,
     }
   });
+
+  useEffect(() => {
+    reset({
+      status: ProjectStatus.Planning,
+      budget: 0,
+      description: '',
+      director: '',
+      producer: '',
+      name: '',
+      ...initialData,
+    });
+  }, [initialData, reset]);
+
 
   const startDate = watch('startDate');
 

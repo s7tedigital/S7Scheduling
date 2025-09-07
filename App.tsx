@@ -9,6 +9,7 @@ import Projects from './pages/Projects';
 import Scenes from './pages/Scenes';
 import CastAndCrew from './pages/CastAndCrew';
 import Schedule from './pages/Schedule';
+import Templates from './pages/Templates';
 import { AppProvider } from './context/AppContext';
 
 const App: React.FC = () => {
@@ -26,7 +27,7 @@ const App: React.FC = () => {
                 <Route path="/scenes" element={<Scenes />} />
                 <Route path="/cast-crew" element={<CastAndCrew />} />
                 <Route path="/schedule" element={<Schedule />} />
-                {/* Add other routes here */}
+                <Route path="/templates" element={<Templates />} />
               </Routes>
             </main>
           </div>

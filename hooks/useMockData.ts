@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from 'react';
-import { mockProjects, mockScenes, mockCastAndCrew } from '../utils/mockData';
-import { Project, Scene, CastMember } from '../types';
+import { mockProjects, mockScenes, mockCastAndCrew, mockProjectTemplates } from '../utils/mockData';
+import { Project, Scene, CastMember, ProjectTemplate } from '../types';
 
 const useMockData = <T,>(data: T[], delay: number = 500) => {
   const [result, setResult] = useState<T[]>([]);
@@ -25,3 +24,4 @@ export const useScenes = (projectId?: string) => {
     return useMockData<Scene>(filteredScenes);
 };
 export const useCastAndCrew = () => useMockData<CastMember>(mockCastAndCrew);
+export const useProjectTemplates = () => useMockData<ProjectTemplate>(mockProjectTemplates);

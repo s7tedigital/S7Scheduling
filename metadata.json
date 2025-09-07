@@ -1,5 +1,7 @@
 {
   "name": "S7Scheduling - Audiovisual Production Scheduling System",
   "description": "A comprehensive audiovisual production scheduling web application. It features a modern, responsive three-column layout for managing projects, scenes, cast, crew, and generating smart schedules using AI.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [
+    "camera"
+  ]
 }

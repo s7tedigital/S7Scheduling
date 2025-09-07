@@ -7,6 +7,7 @@ import {
   ScenesIcon,
   CastCrewIcon,
   ScheduleIcon,
+  TemplateIcon,
   LogoutIcon,
 } from '../ui/Icon';
 
@@ -16,6 +17,7 @@ const navItems = [
   { path: '/scenes', name: 'Scenes', icon: ScenesIcon },
   { path: '/cast-crew', name: 'Cast & Crew', icon: CastCrewIcon },
   { path: '/schedule', name: 'Schedule', icon: ScheduleIcon },
+  { path: '/templates', name: 'Templates', icon: TemplateIcon },
 ];
 
 const Sidebar: React.FC = () => {

@@ -1,8 +1,8 @@
-
 import React, { useState, useCallback } from 'react';
 import Card from '../components/ui/Card';
 import { useScenes, useProjects } from '../hooks/useMockData';
 import { generateScheduleSuggestion, ScheduleSuggestion } from '../services/geminiService';
+import GanttChart from '../components/schedule/GanttChart';
 
 const Schedule: React.FC = () => {
   const { data: scenes } = useScenes('proj-1'); // Hardcoding project for demo
@@ -33,9 +33,34 @@ const Schedule: React.FC = () => {
     }
   }, [scenes, projects]);
   
+  const renderContent = () => {
+    if (isLoading) {
+      return <div className="text-center p-6 text-primary-500">Thinking... Please wait a moment while the AI generates a schedule.</div>;
+    }
+    if (error) {
+       return <div className="text-center p-4 m-6 bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300 rounded-md">{error}</div>;
+    }
+    if (suggestion) {
+        if (suggestion.length > 0) {
+            return <GanttChart schedule={suggestion} />;
+        }
+        return (
+            <div className="text-center p-6">
+                <p className="text-slate-500 dark:text-slate-400">All scenes for this project are already scheduled.</p>
+            </div>
+        );
+    }
+    return (
+        <div className="text-center p-6">
+            <p className="text-slate-500 dark:text-slate-400">Click the button to generate an optimized schedule suggestion for unscheduled scenes.</p>
+            <p className="text-sm text-slate-400 dark:text-slate-500 mt-2">A visual Gantt chart will be displayed here.</p>
+        </div>
+    );
+  };
+  
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center flex-wrap gap-4">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Smart Schedule</h1>
         <button
           onClick={handleGenerateSchedule}
@@ -48,51 +73,15 @@ const Schedule: React.FC = () => {
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           )}
-          {isLoading ? 'Generating...' : '✨ Generate AI Suggestion'}
+          {isLoading ? 'Generating...' : '✨ Generate AI Schedule'}
         </button>
       </div>
 
-      <Card className="p-6">
-        <h2 className="text-xl font-semibold mb-4 text-slate-800 dark:text-white">Schedule for "Desert Bloom"</h2>
-        {error && <div className="text-center p-4 bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300 rounded-md">{error}</div>}
-        
-        {!suggestion && !isLoading && !error && (
-            <div className="text-center py-10">
-                <p className="text-slate-500 dark:text-slate-400">Click the button to generate an optimized schedule suggestion for unscheduled scenes.</p>
-            </div>
-        )}
-
-        {isLoading && <div className="text-center py-10 text-primary-500">Thinking... Please wait a moment.</div>}
-        
-        {suggestion && suggestion.length > 0 && (
-          <div className="space-y-6">
-            {suggestion.map((day, index) => (
-              <div key={index} className="p-4 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-slate-900">
-                <div className="flex justify-between items-center mb-3">
-                    <h3 className="font-bold text-lg text-primary-700 dark:text-primary-300">{day.day}</h3>
-                    <span className="font-mono text-sm text-slate-600 dark:text-slate-400">{day.date}</span>
-                </div>
-                <p className="text-sm italic text-slate-500 dark:text-slate-400 mb-4">{day.notes}</p>
-                <div className="space-y-2">
-                    {day.scenes.map((scene, sceneIndex) => (
-                        <div key={sceneIndex} className="p-3 bg-white dark:bg-slate-800 rounded-md flex justify-between items-center">
-                            <div>
-                                <p className="font-semibold">Scene {scene.sceneNumber}</p>
-                                <p className="text-xs text-slate-500">{scene.location}</p>
-                            </div>
-                            <span className="text-sm font-medium">{scene.estimatedTime}</span>
-                        </div>
-                    ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-         {suggestion && suggestion.length === 0 && (
-            <div className="text-center py-10">
-                <p className="text-slate-500 dark:text-slate-400">All scenes for this project are already scheduled.</p>
-            </div>
-        )}
+      <Card>
+        <div className="p-6 border-b border-slate-200 dark:border-slate-800">
+          <h2 className="text-xl font-semibold text-slate-800 dark:text-white">Schedule Timeline for "Desert Bloom"</h2>
+        </div>
+        {renderContent()}
       </Card>
     </div>
   );

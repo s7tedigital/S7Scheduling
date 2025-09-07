@@ -26,7 +26,7 @@ export const DashboardIcon: React.FC<{ className?: string }> = ({ className }) =
   <Icon className={className}>
     <rect width="7" height="9" x="3" y="3" rx="1" />
     <rect width="7" height="5" x="14" y="3" rx="1" />
-    <rect width="7"height="9" x="14" y="12" rx="1" />
+    <rect width="7" height="9" x="14" y="12" rx="1" />
     <rect width="7" height="5" x="3" y="16" rx="1" />
   </Icon>
 );
@@ -65,6 +65,13 @@ export const ScheduleIcon: React.FC<{ className?: string }> = ({ className }) =>
     <line x1="8" x2="8" y1="2" y2="6" />
     <line x1="3" x2="21" y1="10" y2="10" />
   </Icon>
+);
+
+export const TemplateIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <Icon className={className}>
+      <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+      <path d="m12 15.5-2.5 1.5 1-3-2-2 3-.5L12 9l1.5 2.5 3 .5-2 2 1 3z" />
+    </Icon>
 );
 
 export const LogoutIcon: React.FC<{ className?: string }> = ({ className }) => (

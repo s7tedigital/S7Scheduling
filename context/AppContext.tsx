@@ -7,6 +7,8 @@ interface AppContextType {
   setSelectedItem: (item: SelectableItem) => void;
   isDetailsPanelOpen: boolean;
   toggleDetailsPanel: () => void;
+  isSearchOpen: boolean;
+  toggleSearch: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -14,6 +16,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [selectedItem, setSelectedItemState] = useState<SelectableItem>(null);
   const [isDetailsPanelOpen, setDetailsPanelOpen] = useState<boolean>(true);
+  const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
 
   const setSelectedItem = useCallback((item: SelectableItem) => {
     setSelectedItemState(item);
@@ -29,8 +32,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   }, [isDetailsPanelOpen]);
 
+  const toggleSearch = useCallback(() => {
+    setIsSearchOpen(prev => !prev);
+  }, []);
+
+
   return (
-    <AppContext.Provider value={{ selectedItem, setSelectedItem, isDetailsPanelOpen, toggleDetailsPanel }}>
+    <AppContext.Provider value={{ selectedItem, setSelectedItem, isDetailsPanelOpen, toggleDetailsPanel, isSearchOpen, toggleSearch }}>
       {children}
     </AppContext.Provider>
   );

@@ -11,6 +11,7 @@ import CastAndCrew from './pages/CastAndCrew';
 import Schedule from './pages/Schedule';
 import Templates from './pages/Templates';
 import { AppProvider } from './context/AppContext';
+import GlobalSearch from './components/search/GlobalSearch';
 
 const App: React.FC = () => {
   return (
@@ -33,6 +34,7 @@ const App: React.FC = () => {
           </div>
           <DetailsPanel />
         </div>
+        <GlobalSearch />
       </HashRouter>
     </AppProvider>
   );
